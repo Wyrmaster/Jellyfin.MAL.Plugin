@@ -1,0 +1,17 @@
+[
+  {
+    "category": "MetaData",
+    "guid": "f812e84d-bf34-42c3-9a73-1a2c251e38be",
+    "name": "MAL",
+    "description": "MetaData provider for Anime series and movies from MyAnimeList",
+    "owner": "Stephen Pichler",
+    "overview": "MyAnimeList Metadata Provider",
+    "versions": [
+      {
+        "version": "1.0.1",
+        "sourceUrl": "https://github.com/Wyrmaster/Jellyfin.MAL.Plugin/releases/download/v1.0.1/Jellyfin.MAL.Plugin.zip",
+        "targetAbi": "10.10"
+      }
+    ]
+  }
+]
