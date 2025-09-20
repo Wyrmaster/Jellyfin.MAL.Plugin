@@ -1,6 +1,6 @@
 [
   {
-    "category": "MetaData",
+    "category": "Metadata",
     "guid": "f812e84d-bf34-42c3-9a73-1a2c251e38be",
     "name": "MAL",
     "description": "MetaData provider for Anime series and movies from MyAnimeList",
