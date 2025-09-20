@@ -14,36 +14,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration Release
+      - name: Build
+        run: dotnet build --configuration Release
 
-    - name: Publish
-      run: dotnet publish --configuration Release -o output
-      
-    - name: Zip plugin
-      run: |
-        cd output
-        zip -r ../Jellyfin.MAL.Plugin.zip .
+      - name: Publish
+        run: dotnet publish --configuration Release -o output
 
-    - name: Generate SHA256 checksum
-      run: shasum -a 256 Jellyfin.MAL.Plugin.zip > Jellyfin.MAL.Plugin.zip.sha256
+      - name: Zip plugin
+        run: |
+          cd output
+          zip -r ../Jellyfin.MAL.Plugin.zip ./JellyFin.Plugin.Mal.dll ./JikanDotNet.dll ./System.Linq.Async.dll
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          Jellyfin.MAL.Plugin.zip
-          Jellyfin.MAL.Plugin.zip.sha256
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Jellyfin.MAL.Plugin.zip
+        
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

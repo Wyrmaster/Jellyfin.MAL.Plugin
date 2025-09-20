@@ -28,7 +28,7 @@ public class Plugin
 
   /// <inheritdoc/>
   public override string Description => "MAL plugin for Jellyfin. Resolving the metadata for Animes using the Jikan API for My Anime List";
-
+  
   #endregion
   
   // #region HasWebPages
