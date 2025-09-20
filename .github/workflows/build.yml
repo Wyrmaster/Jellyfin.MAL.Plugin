@@ -32,10 +32,15 @@ jobs:
       
     - name: Zip plugin
       run: zip -r Jellyfin.MAL.Plugin.zip output/*
+    - name: Generate SHA256 checksum
+      run: shasum -a 256 Jellyfin.MAL.Plugin.zip > Jellyfin.MAL.Plugin.zip.sha256
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        files: Jellyfin.MAL.Plugin.zip
+        files: |
+          Jellyfin.MAL.Plugin.zip
+          Jellyfin.MAL.Plugin.zip.sha256
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
