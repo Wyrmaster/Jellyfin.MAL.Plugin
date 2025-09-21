@@ -46,7 +46,7 @@ public class MalEpisodeProvider: AbstractMalProvider<Episode, EpisodeInfo>
               ? match.Groups[4].Value
               : "0", out int idx))
     {
-      AnimeEpisode episode = (await JikanLoader.Instance.GetAnimeEpisodeAsync(id, idx, cancellationToken)).Data;
+      AnimeEpisode episode = (await JikanLoader.GetAnimeEpisodeAsync(id, idx, cancellationToken));
       result.Item.Name = episode.Title;
       // season number can be set to 1 as animes don't really have seasons in that sense.
       // so for the mal implementation every season has its own id
