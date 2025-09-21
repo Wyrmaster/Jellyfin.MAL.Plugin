@@ -57,7 +57,7 @@ public class MalImageProvider: IRemoteImageProvider
 
     try
     {
-      Anime anime = (await JikanLoader.Instance.GetAnimeAsync(id, cancellationToken)).Data;
+      Anime anime = await JikanLoader.GetAnimeByIdAsync(id, cancellationToken);
 
       return
       [

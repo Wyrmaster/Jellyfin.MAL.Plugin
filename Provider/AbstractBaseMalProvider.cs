@@ -46,9 +46,9 @@ public abstract class AbstractBaseMalProvider<TItemType, TLookupInfoType>
   {
     List<RemoteSearchResult> results = new();
 
-    PaginatedJikanResponse<ICollection<Anime>> response = await JikanLoader.Instance.SearchAnimeAsync(searchInfo.Name, cancellationToken);
+    IAsyncEnumerable<Anime> response = JikanLoader.SearchAnimeAsync(searchInfo.Name, cancellationToken);
 
-    foreach (Anime anime in response.Data)
+    await foreach (Anime anime in response)
     {
       results.Add(new RemoteSearchResult
       {
@@ -86,8 +86,10 @@ public abstract class AbstractBaseMalProvider<TItemType, TLookupInfoType>
     try
     {
       return (this.TryReadIdFromFile(path) is not { } id
-        ? (await JikanLoader.Instance.SearchAnimeAsync(this.ExtractSearchParamFromPath(Path.GetFileNameWithoutExtension(path)), cancellationToken)).Data.First()
-        : (await JikanLoader.Instance.GetAnimeAsync(id, cancellationToken)).Data)!;
+        ? await JikanLoader
+            .SearchAnimeAsync(this.ExtractSearchParamFromPath(Path.GetFileNameWithoutExtension(path)), cancellationToken)
+            .FirstAsync(cancellationToken: cancellationToken)
+        : await JikanLoader.GetAnimeByIdAsync(id, cancellationToken));
     }
     catch (Exception e)
     {

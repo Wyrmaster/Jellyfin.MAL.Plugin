@@ -30,12 +30,12 @@ public class MalSeasonProvider: AbstractBaseMalProvider<Season, SeasonInfo>
 
     try
     {
-      anime = (await JikanLoader.Instance.GetAnimeAsync(int.Parse(info.SeriesProviderIds[ProviderNames.MyAnimeList]), cancellationToken)).Data;
+      anime = await JikanLoader.GetAnimeByIdAsync(int.Parse(info.SeriesProviderIds[ProviderNames.MyAnimeList]), cancellationToken);
     }
     catch (Exception e)
     {
-      Console.WriteLine(e);
-      throw;
+      this.Logger.LogError(e, $"Error resolving anime");
+      anime = null;
     }
 
     if (anime == null)
