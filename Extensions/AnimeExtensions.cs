@@ -83,29 +83,19 @@ public static class AnimeExtensions
     {
       yield break;
     }
-    
-    foreach (IGrouping<string, AnimeCharacter> characters in (await JikanLoader.Instance.GetAnimeCharactersAsync(anime.MalId.Value, cancellationToken))
-             .Data
-             .Where(entry => entry.VoiceActors.Any(actorEntry => actorEntry.Language == Languages.Japanese))
-             .GroupBy(entry => entry.VoiceActors.First(actorEntry => actorEntry.Language == Languages.Japanese).Person.Name))
+
+    await foreach (IAsyncGrouping<string, AnimeCharacter> characters in JikanLoader.GetAnimeCharactersAsync(anime.MalId.Value, cancellationToken)
+                     .Where(entry => entry.VoiceActors.Any(actorEntry => actorEntry.Language == Languages.Japanese))
+                     .GroupBy(entry => entry.VoiceActors.First(actorEntry => actorEntry.Language == Languages.Japanese).Person.Name).WithCancellation(cancellationToken))
     {
-      VoiceActorEntry voiceActor = characters.First().VoiceActors.First(entry => entry.Language == Languages.Japanese);
+      VoiceActorEntry voiceActor = (await characters.FirstAsync(cancellationToken: cancellationToken)).VoiceActors.First(entry => entry.Language == Languages.Japanese);
 
       yield return new()
       {
         Name = characters.Key,
         Role = string.Join("/",characters.Select(entry => entry.Character.Name)),
         Type = PersonKind.Actor,
-        ImageUrl = voiceActor.Person.Images?.JPG?.MaximumImageUrl
-                   ?? voiceActor.Person.Images?.WebP?.MaximumImageUrl
-                   ?? voiceActor.Person.Images?.JPG?.LargeImageUrl
-                   ?? voiceActor.Person.Images?.WebP?.LargeImageUrl
-                   ?? voiceActor.Person.Images?.JPG?.MediumImageUrl
-                   ?? voiceActor.Person.Images?.WebP?.MediumImageUrl
-                   ?? voiceActor.Person.Images?.JPG?.ImageUrl
-                   ?? voiceActor.Person.Images?.WebP?.ImageUrl
-                   ?? voiceActor.Person.Images?.JPG?.SmallImageUrl
-                   ?? voiceActor.Person.Images?.WebP?.SmallImageUrl,
+        ImageUrl = voiceActor.Person.Images.ResolveTheBestPossibleImage(),
         ProviderIds = { [ProviderNames.MyAnimeList] = voiceActor.Person.MalId.ToString() }
       };
     }

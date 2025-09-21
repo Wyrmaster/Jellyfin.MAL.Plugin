@@ -5,10 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     
-    <Version>1.0.4</Version>
-    <FileVersion>1.0.4</FileVersion>
-    <ProductVersion>1.0.4</ProductVersion>
-    <AssemblyVersion>1.0.4</AssemblyVersion>
+    <Version>1.1.0</Version>
+    <FileVersion>1.1.0</FileVersion>
+    <ProductVersion>1.1.0</ProductVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
