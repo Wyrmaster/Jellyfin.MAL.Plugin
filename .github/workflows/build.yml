@@ -85,12 +85,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit Manifest to Master
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update manifest"
-          branch: master
-          file_pattern: 'manifest.json'
-          repository: masterRepo
-          commit_user_name: "GitHub Actions Bot"
-          skip_dirty_check: true
+      - uses: peter-evans/create-pull-request@v7.0.8
