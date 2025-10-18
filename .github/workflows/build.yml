@@ -26,7 +26,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore masterRepo/JellyFin.Plugin.Mal.csproj
 
       # extract the version and abi from the manifest
       - name: Extract Version and ABI from csproj
@@ -38,10 +38,10 @@ jobs:
           echo "TARGET_ABI=${TARGET_ABI}" >> $GITHUB_ENV
 
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release masterRepo/JellyFin.Plugin.Mal.csproj
 
       - name: Publish
-        run: dotnet publish --configuration Release -o output
+        run: dotnet publish --configuration Release -o output masterRepo/JellyFin.Plugin.Mal.csproj
 
       - name: Zip plugin
         run: |
@@ -89,6 +89,6 @@ jobs:
           commit_message: "Update manifest"
           branch: main
           file_pattern: 'manifest.json'
-          repository: main_repo
+          repository: masterRepo
           commit_user_name: "GitHub Actions Bot"
           skip_dirty_check: true
