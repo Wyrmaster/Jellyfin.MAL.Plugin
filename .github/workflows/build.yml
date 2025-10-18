@@ -77,7 +77,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            Jellyfin.MAL.Plugin.zip
+            Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip
           name: "Version ${{ env.VERSION }}"
           tag: v${{ env.VERSION }}
           artifacts: "Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip"
