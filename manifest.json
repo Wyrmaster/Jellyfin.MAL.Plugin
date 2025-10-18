@@ -8,6 +8,13 @@
     "overview": "MyAnimeList Metadata Provider",
     "versions": [
       {
+        "checksum": "e07d4fdbad7abb5358ddfdb231050098",
+        "sourceUrl": "https://github.com/Wyrmaster/Jellyfin.MAL.Plugin/releases/download/v1.1.1/Jellyfin.MAL.Plugin.zip",
+        "targetAbi": "10.10.7",
+        "timestamp": "2025-10-18T14:51:28Z",
+        "version": "1.1.1"
+      },
+      {
         "checksum": "DE3F0664C18FB8087040F563E4D5C5C3",
         "changelog": "initial version",
         "targetAbi": "10.10.7",
