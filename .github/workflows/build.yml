@@ -73,14 +73,14 @@ jobs:
 
           mv masterRepo/manifest-updated.json masterRepo/manifest.json
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            Jellyfin.MAL.Plugin.zip
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: |
+      #       Jellyfin.MAL.Plugin.zip
         
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit Manifest to Master
         uses: stefanzweifel/git-auto-commit-action@v5
