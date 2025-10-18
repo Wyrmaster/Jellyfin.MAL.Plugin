@@ -94,3 +94,5 @@ jobs:
           repository: masterRepo
           commit_user_name: "GitHub Actions Bot"
           skip_dirty_check: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_PUSH_TOKEN }}
