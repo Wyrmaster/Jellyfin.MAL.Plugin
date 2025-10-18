@@ -37,6 +37,11 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "TARGET_ABI=${TARGET_ABI}" >> $GITHUB_ENV
 
+      - name: Create and push tag
+        run: |
+          git tag v${{ env.VERSION }}
+          git push
+
       - name: Build
         run: dotnet build --configuration Release masterRepo/JellyFin.Plugin.Mal.csproj
 
@@ -78,10 +83,6 @@ jobs:
         with:
           files: |
             Jellyfin.MAL.Plugin.zip
-          name: "Version ${{ env.VERSION }}"
-          tag: v${{ env.VERSION }}
-          artifacts: "Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip"
-          artifactContentType: "application/zip"
         
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
