@@ -14,7 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout master
+        uses: actions/checkout@v3
+        with:
+          path: masterRepo
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -23,6 +27,15 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
+
+      # extract the version and abi from the manifest
+      - name: Extract Version and ABI from csproj
+        id: extract_version_abi
+        run: |
+          VERSION=$(grep -oPm1 "(?<=<Version>)(.*)(?=</Version>)" main_repo/**/*.csproj)
+          TARGET_ABI=$(grep -oPm1 "(?<=<PackageReference Include=\"Jellyfin.Controller\" Version=\")(.*)(?=\")" main_repo/**/*.csproj)
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "TARGET_ABI=${TARGET_ABI}" >> $GITHUB_ENV
 
       - name: Build
         run: dotnet build --configuration Release
@@ -35,6 +48,32 @@ jobs:
           cd output
           zip -r ../Jellyfin.MAL.Plugin.zip ./JellyFin.Plugin.Mal.dll ./JikanDotNet.dll ./System.Linq.Async.dll
 
+      # generate the hash for the manifest
+      - name: Generate MD5 Checksum for ZIP
+        id: checksum
+        run: |
+          CHECKSUM=$(md5sum myanimelist_${{ env.VERSION }}.zip | awk '{ print $1 }')
+          echo "CHECKSUM=${CHECKSUM}" >> $GITHUB_ENV
+
+      - name: Update Manifest File
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          jq --arg version "${{ env.VERSION }}" \
+             --arg checksum "${{ env.CHECKSUM }}" \
+             --arg sourceUrl "https://github.com/Wyrmaster/Jellyfin.MAL.Plugin/releases/download/v${{ env.VERSION }}/Jellyfin.MAL.Plugin.zip" \
+             --arg targetAbi "${{ env.TARGET_ABI }}" \
+             --arg timestamp "$TIMESTAMP" \
+             '.[0].versions = [{
+                changelog: $changelog,
+                checksum: $checksum,
+                sourceUrl: $sourceUrl,
+                targetAbi: $targetAbi,
+                timestamp: $timestamp,
+                version: $version
+              }] + .[0].versions' main_repo/manifest.json > main_repo/manifest-updated.json
+
+          mv masterRepo/manifest-updated.json masterRepo/manifest.json
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -43,3 +82,13 @@ jobs:
         
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Manifest to Master
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update manifest"
+          branch: main
+          file_pattern: 'manifest.json'
+          repository: main_repo
+          commit_user_name: "GitHub Actions Bot"
+          skip_dirty_check: true
