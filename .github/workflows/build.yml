@@ -73,20 +73,20 @@ jobs:
 
           mv masterRepo/manifest-updated.json masterRepo/manifest.json
 
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: |
-      #       Jellyfin.MAL.Plugin.zip
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Jellyfin.MAL.Plugin.zip
         
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit Manifest to Master
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update manifest"
-          branch: feature/version.1.1.1
+          branch: master
           file_pattern: 'manifest.json'
           repository: masterRepo
           commit_user_name: "GitHub Actions Bot"
