@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MAL</title>
+</head>
+<body>
+<div id="configPage"
+     data-role="page"
+     class="page type-interior pluginConfigurationPage configPage"
+     data-require="emby-input,emby-button,emby-checkbox">
+  <div data-role="content">
+    <div class="content-primary">
+      <h1>MAL</h1>
+      <form class="configForm">
+
+        <div class="inputContainer">
+          <input is="emby-input"
+                 type="text"
+                 id="jikanUrl"
+                 label="Jikan Url" />
+          <div class="fieldDescription">Url of a custom Jikan Url</div>
+        </div>
+
+        <div>
+          <button is="emby-button"
+                  type="submit"
+                  class="raised button-submit block">
+            <span>Save</span>
+          </button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var PluginConfig = {
+      pluginId: "f812e84d-bf34-42c3-9a73-1a2c251e38be"
+    };
+
+    document.querySelector('.configPage')
+      .addEventListener('pageshow', function () {
+        Dashboard.showLoadingMsg();
+        ApiClient.getPluginConfiguration(PluginConfig.pluginId).then(function (config) {
+          
+          const jikanUrl = document.querySelector('#jikanUrl');
+          jikanUrl.value = config.CustomJikanEndPoint;
+          jikanUrl.dispatchEvent(new Event('change', {
+            bubbles: true,
+            cancelable: false
+          }));
+
+          Dashboard.hideLoadingMsg();
+        });
+      });
+
+    document.querySelector('.configForm')
+      .addEventListener('submit', function (e) {
+        Dashboard.showLoadingMsg();
+
+        ApiClient.getPluginConfiguration(PluginConfig.pluginId).then(function (config) {
+          config.CustomJikanEndPoint = document.querySelector('#jikanUrl').value;
+
+          ApiClient.updatePluginConfiguration(PluginConfig.pluginId, config).then(Dashboard.processPluginConfigurationUpdateResult);
+        });
+
+        e.preventDefault();
+        return false;
+      });
+  </script>
+</div>
+</body>
+</html>

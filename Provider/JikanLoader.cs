@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using JikanDotNet;
+using JikanDotNet.Config;
 
 namespace JellyFin.Plugin.Mal.Provider;
 
@@ -17,14 +18,51 @@ public static class JikanLoader
   private static readonly ConcurrentDictionary<string, AnimeEpisode> AnimeEpisodeDict = new();
   private static readonly ConcurrentDictionary<string, IEnumerable<Anime>> AnimeSearchDict = new();
 
+  private static string _url = string.Empty;
+  private static PluginConfiguration? _configuration;
+
   #endregion
   
   #region Instance
 
+  private static Jikan? _instance;
+
   /// <summary>
   ///   Static Singleton reference to the Jikan API
   /// </summary>
-  private static Jikan Instance { get; } = new();
+  private static Jikan Instance
+  {
+    get
+    {
+      // no configuration return default
+      if (_configuration == null)
+      {
+        return _instance ??= new();
+      }
+      
+      // if custom endpoint is null or empty then we can assume that we need a default
+      if (string.IsNullOrEmpty(_configuration.CustomJikanEndPoint))
+      {
+        // if the old is also null or empty then we create the default
+        if (string.IsNullOrEmpty(_url))
+        {
+          return _instance ??= new();
+        }
+      }
+
+      // otherwise compare the previously used ones and create one with a custom endpoint
+      if (_configuration.CustomJikanEndPoint != _url)
+      {
+        _configuration.CustomJikanEndPoint = _configuration.CustomJikanEndPoint;
+        _instance = new(new JikanClientConfiguration(), new HttpClient
+        {
+          BaseAddress = new Uri(_configuration.CustomJikanEndPoint),
+        });
+      }
+
+      return _instance ??= new();
+    }
+  }
 
   #endregion
 
@@ -122,6 +160,15 @@ public static class JikanLoader
     {
       yield return animeCharacter;
     }
+  }
+
+  /// <summary>
+  ///   Sets the configuration for the custom jikan api
+  /// </summary>
+  /// <param name="configuration"></param>
+  public static void SetConfiguration(PluginConfiguration configuration)
+  {
+    _configuration = configuration;
   }
 
   #endregion

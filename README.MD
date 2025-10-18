@@ -19,6 +19,4 @@ Anime
 
 ## Todos
 * Proper search method to resolve animes using the name
-* Config page
-
 

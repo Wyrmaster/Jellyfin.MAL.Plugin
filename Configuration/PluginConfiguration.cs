@@ -19,9 +19,9 @@ public class PluginConfiguration: BasePluginConfiguration
   #region Properties
 
   /// <summary>
-  ///   Maximum number of characters to show
+  ///   Hostname of the a custom Jikan endpoint
   /// </summary>
-  public int MaxCharactersToShow { get; set; } = 250;
-
+  public string CustomJikanEndPoint { get; set; } = string.Empty;
+  
   #endregion
 }

@@ -1,5 +1,7 @@
-﻿using MediaBrowser.Common.Configuration;
+﻿using JellyFin.Plugin.Mal.Provider;
+using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
+using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 
 namespace JellyFin.Plugin.Mal;
@@ -8,12 +10,14 @@ namespace JellyFin.Plugin.Mal;
 ///   Plugin entry point 
 /// </summary>
 public class Plugin
-  : BasePlugin<PluginConfiguration>
+  : BasePlugin<PluginConfiguration>,
+    IHasWebPages
 {
   #region Constructor
   
   public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer) : base(applicationPaths, xmlSerializer)
   {
+    JikanLoader.SetConfiguration(this.Configuration);
   }
   
   #endregion
@@ -31,17 +35,17 @@ public class Plugin
   
   #endregion
   
-  // #region HasWebPages
-  //
-  // public IEnumerable<PluginPageInfo> GetPages() =>
-  // [
-  //   new PluginPageInfo()
-  //   {
-  //     Name = "Mal",
-  //     EmbeddedResourcePath = "JellyFin.Plugin.Mal.Configuration.configPage.html",
-  //     DisplayName = "Mal",
-  //   }
-  // ];
-  //
-  // #endregion
+  #region HasWebPages
+  
+  public IEnumerable<PluginPageInfo> GetPages() =>
+  [
+    new PluginPageInfo()
+    {
+      Name = "Mal",
+      EmbeddedResourcePath = "JellyFin.Plugin.Mal.Configuration.config.html",
+      DisplayName = "Mal",
+    }
+  ];
+  
+  #endregion
 }

@@ -18,7 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Configuration\configPage.html" />
+    <None Remove="Configuration\config.html" />
+    <EmbeddedResource Include="Configuration\config.html" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y &quot;$(TargetDir)*&quot; &quot;$(LocalAppData)\jellyfin\plugins\MAL\&quot;&#xA;xcopy /y &quot;$(userprofile)\.nuget\packages\jikandotnet\2.9.1\lib\netstandard2.0\JikanDotNet.dll&quot; &quot;$(LocalAppData)\jellyfin\plugins\MAL\&quot;&#xA;xcopy /y &quot;$(userprofile)\.nuget\\packages\system.linq.async\6.0.3\lib\netstandard2.0\System.Linq.Async.dll&quot; &quot;$(LocalAppData)\jellyfin\plugins\MAL\&quot;" />
+  </Target>
 
 </Project>
