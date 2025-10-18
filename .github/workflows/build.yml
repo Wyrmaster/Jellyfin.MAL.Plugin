@@ -2,6 +2,8 @@ name: Build Jellyfin Plugin
 
 on:
   push:
+    tags:
+      - 'v*'
     branches: [ main ]
   pull_request:
     branches: [ main ]
@@ -34,11 +36,6 @@ jobs:
           TARGET_ABI=$(grep -oPm1 "(?<=<PackageReference Include=\"Jellyfin.Controller\" Version=\")(.*)(?=\")" masterRepo/JellyFin.Plugin.Mal.csproj)
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "TARGET_ABI=${TARGET_ABI}" >> $GITHUB_ENV
-
-      - name: Create and push tag
-        run: |
-          git tag v${{ env.VERSION }}
-          git push
 
       - name: Build
         run: dotnet build --configuration Release masterRepo/JellyFin.Plugin.Mal.csproj
