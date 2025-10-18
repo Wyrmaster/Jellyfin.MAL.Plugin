@@ -81,18 +81,7 @@ jobs:
         with:
           files: |
             Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip
+             masterRepo/manifest.json
         
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit Manifest to Master
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update manifest"
-          branch: master
-          file_pattern: 'manifest.json'
-          repository: masterRepo
-          commit_user_name: "GitHub Actions Bot"
-          skip_dirty_check: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_PUSH_TOKEN }}
