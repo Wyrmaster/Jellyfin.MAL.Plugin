@@ -63,7 +63,7 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           jq --arg version "${{ env.VERSION }}" \
              --arg checksum "${{ env.CHECKSUM }}" \
-             --arg sourceUrl "https://github.com/Wyrmaster/Jellyfin.MAL.Plugin/releases/download/v${{ env.VERSION }}/Jellyfin.MAL.Plugin.zip" \
+             --arg sourceUrl "https://github.com/Wyrmaster/Jellyfin.MAL.Plugin/releases/download/v${{ env.VERSION }}/Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip" \
              --arg targetAbi "${{ env.TARGET_ABI }}" \
              --arg timestamp "$TIMESTAMP" \
              '.[0].versions = [{
