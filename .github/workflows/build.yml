@@ -46,13 +46,13 @@ jobs:
       - name: Zip plugin
         run: |
           cd output
-          zip -r ../Jellyfin.MAL.Plugin.zip ./JellyFin.Plugin.Mal.dll ./JikanDotNet.dll ./System.Linq.Async.dll
+          zip -r ../Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip ./JellyFin.Plugin.Mal.dll ./JikanDotNet.dll ./System.Linq.Async.dll
 
       # generate the hash for the manifest
       - name: Generate MD5 Checksum for ZIP
         id: checksum
         run: |
-          CHECKSUM=$(md5sum myanimelist_${{ env.VERSION }}.zip | awk '{ print $1 }')
+          CHECKSUM=$(md5sum Jellyfin.MAL.Plugin.v${{ env.VERSION }}.zip | awk '{ print $1 }')
           echo "CHECKSUM=${CHECKSUM}" >> $GITHUB_ENV
 
       - name: Update Manifest File
@@ -87,7 +87,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update manifest"
-          branch: main
+          branch: feature/version.1.1.1
           file_pattern: 'manifest.json'
           repository: masterRepo
           commit_user_name: "GitHub Actions Bot"
