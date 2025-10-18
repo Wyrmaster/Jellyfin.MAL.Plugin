@@ -64,7 +64,6 @@ jobs:
              --arg targetAbi "${{ env.TARGET_ABI }}" \
              --arg timestamp "$TIMESTAMP" \
              '.[0].versions = [{
-                changelog: $changelog,
                 checksum: $checksum,
                 sourceUrl: $sourceUrl,
                 targetAbi: $targetAbi,
