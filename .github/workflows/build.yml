@@ -70,7 +70,7 @@ jobs:
                 targetAbi: $targetAbi,
                 timestamp: $timestamp,
                 version: $version
-              }] + .[0].versions' main_repo/manifest.json > main_repo/manifest-updated.json
+              }] + .[0].versions' masterRepo/manifest.json > masterRepo/manifest-updated.json
 
           mv masterRepo/manifest-updated.json masterRepo/manifest.json
 
